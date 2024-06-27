@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 
-export interface todo {
+export interface Todo {
   id: number;
-  tittle: string;
+  title: string;
   completed: boolean;
 }
 
@@ -10,6 +10,31 @@ export interface todo {
   providedIn: 'root'
 })
 export class TodoService {
+  private todos: Todo[] = [];
+  private nextId: number = 1;
 
   constructor() { }
+
+  getTodos(): Todo[] {
+    return this.todos;
+  }
+
+  addTodo(title: string): void {
+    this.todos.push({
+      id: this.nextId++,
+      title,
+      completed: false
+    });
+  }
+
+  updateTodo(id: number, updatedTodo: Partial<Todo>): void {
+    const todo = this.todos.find(todo => todo.id === id);
+    if (todo) {
+      Object.assign(todo, updatedTodo);
+    }
+  }
+
+  deleteTodo(id: number): void {
+    this.todos = this.todos.filter(todo => todo.id !== id);
+  }
 }
